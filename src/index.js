@@ -263,6 +263,20 @@ module.exports = (
         }
       }
     )
+    
+    // Handle source tags
+    extractUrlAttributeAndElement($(`source[srcset]`), `srcset`).forEach(
+      ({ url, element }) => {
+        try {
+          const ext = url.split(`.`).pop()
+          if (!options.ignoreFileExtensions.includes(ext)) {
+            generateImagesAndUpdateNode(element, node, `srcset`)
+          }
+        } catch (err) {
+          // Ignore
+        }
+      }
+    )
 
     // Handle video tags.
     extractUrlAttributeAndElement(
